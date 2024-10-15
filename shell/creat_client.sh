@@ -8,8 +8,8 @@ if [ "$EUID" -ne 0 ]; then
  exit 1
 fi
 
-read -p "Enter user name: " user_name
-read -p "Set ip for client: " local_address_client
+# read -p "Enter user name: " user_name
+# read -p "Set ip for client: " local_address_client
 
 wg genkey | tee "${user_name}_privatekey" | wg pubkey | tee "${user_name}_publickey"
 
