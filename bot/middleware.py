@@ -1,16 +1,20 @@
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
 from typing import Any, Callable, Dict, Awaitable
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
-class SomeMidleware(BaseMiddleware):
-  def __init__(self) -> None:
-    self.msg = "message"
+class DataBaseMD(BaseMiddleware):
+  def __init__(self, session_pool: async_sessionmaker) -> None:
+    self.session_poll = session_pool
 
-  async def __call__(self,
-          handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
-          event: TelegramObject,
-          data: Dict[str, Any],
-          ) -> Any:
+  async def __call__(
+    self,
+    handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+    event: TelegramObject,
+    data: Dict[str, Any],
+    ) -> Any:
+    
+    async with self.session_poll() as session:
+      data['session'] = session
 
-    data["msg"] = self.msg
-    return await handler(event, data)
+      return await handler(event, data)
