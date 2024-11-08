@@ -20,14 +20,15 @@ async def start_up_bot():
 async def main():
     
     dp = Dispatcher()
+
+    dp.message.middleware(DataBaseMD(session_pool=session_maker))
+
     dp.include_router(admin_route)
     dp.include_router(client_route)
 
     dp.startup.register(start_up_bot)
 
-    admin_route.message.middleware(DataBaseMD(session_pool=session_maker))
-
-    await dp.start_polling(bot)
+    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
 
 if __name__ == "__main__":
     asyncio.run(main())

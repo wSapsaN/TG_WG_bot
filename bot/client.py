@@ -4,6 +4,12 @@ from aiogram import Bot
 
 from keyboards import keyboard_client
 from inline_keyboards import inline
+from database.models import User
+
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, update
+
+from genarate_wg import create_config
 
 client_route = Router()
 
@@ -12,7 +18,7 @@ async def cmd_st(message: types.Message):
   await message.answer("Привет. Тебе нужен доступ до VPN?", reply_markup=keyboard_client)
 
 @client_route.message(F.text == 'VPN')
-async def vpn(message: types.Message, bot: Bot):
+async def vpn(message: types.Message, bot: Bot, session: AsyncSession):
   await message.answer("Запрос на получение VPN отправлен. Ожидайте ответа")
   await bot.send_message(
     bot.admin_list[0],
@@ -20,23 +26,17 @@ async def vpn(message: types.Message, bot: Bot):
     reply_markup=inline,
   )
 
-@client_route.message(F.text == 'Инструкция')
-async def vpn(message: types.Message):
-  await message.answer("Что бы получить доступ до VPN, надо скачать такое-то приложение.")
+  session.add(User(
+    id_telegram=message.from_user.id,
+    nik_name_telegram=message.from_user.username,
+    reqests_vpn=True,
+  ))
 
-@client_route.callback_query(F.data == 'posistiv')
-async def result(callback_query: types.CallbackQuery):
-  await callback_query.answer("Доступ разрешён")
+  await session.commit()
 
-  user_id = int(callback_query.message.text.split()[3])
-  await callback_query.bot.send_message(user_id, 'Доступ разрешён')
-
-@client_route.callback_query(F.data == 'negative')
-async def result(callback_query: types.CallbackQuery):
-  await callback_query.answer("Доступ запрещён")
-
-  user_id = int(callback_query.message.text.split()[3])
-  await callback_query.bot.send_message(user_id, 'Доступ запрещён')
+# @client_route.message(F.text == 'Инструкция')
+# async def vpn(message: types.Message):
+#   await message.answer("Что бы получить доступ до VPN, надо скачать такое-то приложение.")
 
 @client_route.message(Command('help'))
 async def helper(message: types.Message):
