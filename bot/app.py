@@ -21,7 +21,7 @@ async def main():
     
     dp = Dispatcher()
 
-    dp.message.middleware(DataBaseMD(session_pool=session_maker))
+    dp.update.middleware(DataBaseMD(session_pool=session_maker))
 
     dp.include_router(admin_route)
     dp.include_router(client_route)
