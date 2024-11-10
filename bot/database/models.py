@@ -11,7 +11,7 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
     id_telegram: Mapped[int] = mapped_column(Integer, unique=True)
-    nik_name_telegram: Mapped[int] = mapped_column(String, default=None)
+    nik_name_telegram: Mapped[int] = mapped_column(Integer, default=None)
 
     use_runtime: Mapped[bool] = mapped_column(Boolean, default=False)
     reqests_vpn: Mapped[bool] = mapped_column(Boolean, default=False)
