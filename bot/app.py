@@ -25,7 +25,7 @@ async def main():
 
     dp.include_router(admin_route)
     dp.include_router(client_route)
-
+    
     dp.startup.register(start_up_bot)
 
     await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
