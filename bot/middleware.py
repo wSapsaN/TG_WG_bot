@@ -16,6 +16,5 @@ class DataBaseMD(BaseMiddleware):
     
     async with self.session_poll() as session:
       data['session'] = session
-      data['q'] = "st"
 
       return await handler(event, data)
