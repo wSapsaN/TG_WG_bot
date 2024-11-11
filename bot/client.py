@@ -4,12 +4,11 @@ from aiogram import Bot
 
 from keyboards import keyboard_client
 from inline_keyboards import inline
-from database.models import User
+from database.orm_clinet import add_client
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update
 
-from genarate_wg import create_config
+# from genarate_wg import create_config
 
 client_route = Router()
 
@@ -26,14 +25,13 @@ async def vpn(message: types.Message, bot: Bot, session: AsyncSession):
     reply_markup=inline,
   )
 
-  session.add(User(
-    id_telegram=message.from_user.id,
-    nik_name_telegram=message.from_user.username,
-    reqests_vpn=True,
-  ))
+  await add_client(
+    session=session, 
+    id_telegram=message.from_user.id, 
+    nik_name=message.from_user.username,
+  )
 
-  await session.commit()
-
+# TODO: 
 # @client_route.message(F.text == 'Инструкция')
 # async def vpn(message: types.Message):
 #   await message.answer("Что бы получить доступ до VPN, надо скачать такое-то приложение.")
