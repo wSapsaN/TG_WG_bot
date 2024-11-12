@@ -26,14 +26,11 @@ async def result(callback: types.CallbackQuery, session: AsyncSession):
 
   user_id = int(callback.message.text.split()[3])
 
-  query = select(User.ip_client).where(User.id_telegram == user_id)
-  res = await session.execute(query)
-  s = res.scalar()
-
   # await callback.bot.send_message(user_id, f'{type(s)} {s}')
 
-  # file = types.FSInputFile("PATH")
-  # await callback.bot.send_document(user_id, file)
+
+  file = types.FSInputFile("PATH")
+  await callback.bot.send_document(user_id, file)
 
 @admin_route.callback_query(F.data == 'negative')
 async def result(callback_query: types.CallbackQuery):
