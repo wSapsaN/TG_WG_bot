@@ -13,8 +13,8 @@ class User(Base):
     id_telegram: Mapped[int] = mapped_column(Integer, unique=True)
     nik_name_telegram: Mapped[str] = mapped_column(String, default=None)
 
-    use_runtime: Mapped[bool] = mapped_column(Boolean, default=False)
-    reqests_vpn: Mapped[bool] = mapped_column(Boolean, default=False)
+    use_runtime: Mapped[bool] = mapped_column(Boolean, default=0)
+    reqests_vpn: Mapped[bool] = mapped_column(Boolean, default=0)
 
     ip_client: Mapped[str] = mapped_column(String, default='0')
 
