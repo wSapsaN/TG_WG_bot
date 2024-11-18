@@ -1,5 +1,7 @@
 import asyncio
 from aiogram import Bot, Dispatcher
+from aiogram.client.default import DefaultBotProperties
+from aiogram.enums.parse_mode import ParseMode
 
 from admin import admin_route
 from client import client_route
@@ -9,7 +11,7 @@ from config import TOKEN
 
 from database.engine import create_db, drop_db, session_maker
 
-bot = Bot(token=TOKEN)
+bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
 bot.admin_list = [667066036]
 
 async def start_up_bot():
@@ -18,7 +20,9 @@ async def start_up_bot():
     await create_db()
 
 async def main():
-    
+    # TODO:
+    # Logger: https://habr.com/ru/companies/otus/articles/773540/
+
     dp = Dispatcher()
 
     dp.update.middleware(DataBaseMD(session_pool=session_maker))
