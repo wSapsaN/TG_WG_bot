@@ -4,14 +4,15 @@ from aiogram import Router, F, types
 from filter.chat_types import ChatTypesFilter, IsAdmin
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 
-from database.models import User
 from database.orm_admin import (
   outAllUsers, get_nameClinet, get_lastIPClinet
 )
+from database.orm_clinet import update_ip
 
 from genarate_wg import create_config
+
+from keyboards.inline_keyboards import instruction
 
 admin_route = Router()
 admin_route.message.filter(ChatTypesFilter(['private']), IsAdmin())
@@ -32,16 +33,28 @@ async def result(callback: types.CallbackQuery, session: AsyncSession):
   last_ip = await get_lastIPClinet(session=session, id_telegram=user_id)
   name_client = await get_nameClinet(session=session, id_telegram=user_id)
 
-  # await callback.bot.send_message(user_id, str(res))
-
   if last_ip <= 250:
-    create_config(ip=last_ip+1, user_name=name_client)
+    ip_clinet = f"10.10.10.{last_ip+1}"
+    file_name = await create_config(ip=ip_clinet, user_name=name_client)
 
-  # TODO:
-  # file = types.FSInputFile("PATH")
-  # await callback.bot.send_document(user_id, file)
-  # await callback.bot.send_message(user_id, "Инструкция по подключению.......") # надо добавить кнопки
-  # инструкции типа Windows, Linux, Android, ios, MacOS
+    file = types.FSInputFile(file_name)
+    await callback.bot.send_document(user_id, file)
+    await callback.bot.send_message(
+      user_id, 
+      "Выбирите подходящую инструкцию для подключения", 
+      reply_markup=await instruction()
+    )
+    
+    await update_ip(
+      session=session, 
+      id_telegram=user_id, 
+      address=ip_clinet
+    )
+
+    return
+
+  await callback.answer(f"Invalid ip address {ip_clinet}")
+  await callback.message.bot(user_id, "На данный момент места на подключение ограничены, попробуйте запросить доступ позже. Извините за неудобства.")
 
 @admin_route.callback_query(F.data == 'negative')
 async def result(callback_query: types.CallbackQuery):

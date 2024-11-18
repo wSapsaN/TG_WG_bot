@@ -21,7 +21,10 @@ async def get_lastIPClinet(session: AsyncSession, id_telegram: int)-> int:
     response = select(User.ip_client).where(User.id == last_id)
     res = await session.execute(response)
     
-    return int(res.scalar().split('.')[-1])
+    last_ip = res.scalar()
+    if last_ip: return int(last_ip.split('.')[-1])
+
+    return 1
 
 async def get_userIDinDB__(session: AsyncSession, id_telegram: int)-> int:
     response = select(User.id).where(User.id_telegram == id_telegram)
