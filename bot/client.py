@@ -8,8 +8,6 @@ from database.orm_clinet import add_client, status_useVPN, up_request
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-# from genarate_wg import create_config
-
 client_route = Router()
 
 @client_route.message(CommandStart())
@@ -38,10 +36,12 @@ async def vpn(message: types.Message, bot: Bot, session: AsyncSession):
     reply_markup=await req_vpn(),
   )
 
-# TODO: 
-# @client_route.message(F.text == 'Инструкция')
-# async def vpn(message: types.Message):
-#   await message.answer("Что бы получить доступ до VPN, надо скачать такое-то приложение.")
+@client_route.message(F.text == "Инструкция")
+async def push_instruction(message: types.Message):
+    await message.answer(
+      "Выбирите подходящую инструкцию для подключения", 
+      reply_markup=await instruction(),
+    )
 
 @client_route.message(Command('help'))
 async def helper(message: types.Message):
@@ -73,4 +73,10 @@ async def ios_instruction(callback: types.CallbackQuery):
 @client_route.callback_query(F.data == 'linux')
 async def linux_instruction(callback: types.CallbackQuery):
   await callback.answer('LINUX')
-  await callback.message.edit_text("Linux инструкция")
+  await callback.message.edit_text("""Чтобы подключить клиент WireGuard в Linux, необходимо:
+
+1. Установить WireGuard на компьютере, с которого будет происходить подключение. В Ubuntu и Debian команда установки: sudo apt install wireguard.
+2. Если в системе не установлены пакеты resolvconf и iptables, установить их: sudo apt install resolvconf iptables.
+3. Переместить скачанный конфигурационный файл клиента WireGuard в папку /etc/wireguard и переименовать в wg0.conf. Имя конфигурационного файла должно соответствовать имени сетевого интерфейса, который будет создан WireGuard. Например: sudo mv ~/wg0-client-losst.conf /etc/wireguard/wg0.conf.
+4. Подключиться к серверу, используя команду wg-quick: wg-quick up wg0.
+""")
