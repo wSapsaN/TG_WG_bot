@@ -14,12 +14,14 @@ char *pub_file(char *file_name)
 
   char fname[100];
 
-  for (size_t i = 0; i < strlen(file_name); i++)
+  size_t i;
+  for (i = 0; i < strlen(file_name); i++)
   {
     fname[i] = file_name[i];
   }
+  fname[i] = '\0';
 
-  char *pub = "_publickey";
+  char *pub = "_privatekey";
   strcat(fname, pub);
 
   printf("%s\n", fname);
@@ -108,10 +110,12 @@ void server_up()
 
     free(names_use);
     names_use = NULL;
-
-    // printf("%s\n", buffer);
+    
     send(new_socket, pubkey, strlen(pubkey), 0);
-   
+
+    free(pubkey);
+    pubkey = NULL;
+
     // closing the connected socket
     close(new_socket);
   }

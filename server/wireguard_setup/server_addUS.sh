@@ -5,6 +5,12 @@ if [ "$EUID" -ne 0 ]; then
  exit 1
 fi
 
+if [[ -z $1 ]] || [[ -z $2 ]];
+then
+  echo "Not found arguments"
+  exit 0
+fi
+
 user_name=$1
 local_address_client=$2
 
@@ -21,8 +27,6 @@ AllowedIPs = ${local_address_client}/32
 EOF
 
 systemctl restart wg-quick@wg0
-
-chown uniq:uniq ${user_name}.conf
 
 exit 0
 
