@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [[ -z $1 ]] || [[ -z $2 ]] || [[ -z $3 ]];
+then
+  echo "Not found arguments"
+fi
+
 user_name=$1
 private_key=$2
 local_address_client=$3
