@@ -1,6 +1,5 @@
 import sys
 import logging
-import asyncio
 import ssl
 
 from aiohttp import web
