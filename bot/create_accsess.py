@@ -21,5 +21,7 @@ def create_accsess(name_us: str, ip_addr: str):
 
   os.system(f"./bot/bot_createUS.sh {name_us} {private_key} {ip_addr}")
 
+  return f"{name_us}.conf"
+
 # Example: 
 #   create_accsess("test", "10.10.10.2")
