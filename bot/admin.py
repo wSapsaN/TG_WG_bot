@@ -37,7 +37,7 @@ async def result(callback: types.CallbackQuery, session: AsyncSession):
   if last_ip <= 250:
     ip_clinet = f"10.10.10.{last_ip+1}"
     # file_name = await create_config(ip=ip_clinet, user_name=name_client)
-    file_name = create_accsess(user_name=name_client, ip_addr=ip_clinet)
+    file_name = create_accsess(name_us=name_client, ip_addr=ip_clinet)
 
     file = types.FSInputFile(file_name)
     await callback.bot.send_document(user_id, file)

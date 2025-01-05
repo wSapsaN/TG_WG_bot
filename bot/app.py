@@ -18,7 +18,7 @@ from config import TOKEN, WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV
 from database.engine import create_db, drop_db, session_maker
 
 bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
-bot.admin_list = [667066036]
+bot.admin_list = []
 
 WEB_SERVER_HOST='127.0.0.1'
 WEB_SERVER_PORT=5000
@@ -43,12 +43,14 @@ async def start_up_bot(bot: Bot):
 async def shutdown_bot(bot: Bot):
     await bot.delete_webhook()
 
+
 def main():
     # TODO:
     # Logger: https://habr.com/ru/companies/otus/articles/773540/
 
-    dp.startup.register(start_up_bot)
     dp.shutdown.register(shutdown_bot)
+    
+    dp.startup.register(start_up_bot)
     
     app = web.Application()
 
@@ -73,5 +75,4 @@ def main():
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-    # asyncio.run(main())
     main()

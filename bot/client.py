@@ -1,6 +1,7 @@
 from aiogram.filters.command import Command, CommandStart
 from aiogram import Router, F, types
 from aiogram import Bot
+from aiogram.enums.parse_mode import ParseMode
 
 from keyboards.keyboards import keyboard_client
 from keyboards.inline_keyboards import req_vpn, instruction
@@ -23,7 +24,7 @@ async def vpn(message: types.Message, bot: Bot, session: AsyncSession):
   )
 
   if await status_useVPN(session=session, id_telegram=message.from_user.id):
-    await message.answer("Вы уже отправили запрос, ожидайте ответа.")
+    await message.answer("Вы уже отправили запрос или используете VPN.")
 
     return
 
@@ -32,8 +33,8 @@ async def vpn(message: types.Message, bot: Bot, session: AsyncSession):
   await message.answer("Запрос на получение VPN отправлен. Ожидайте ответа")
   await bot.send_message(
     bot.admin_list[0],
-    f"Пользователь {message.from_user.full_name} @{message.from_user.username} {message.from_user.id} запрашивает доступ для VPN",
-    reply_markup=await req_vpn(),
+    text=f"Пользователь {message.from_user.full_name} @{message.from_user.username} {message.from_user.id} запрашивает доступ для VPN",
+    reply_markup=await req_vpn(), parse_mode=ParseMode.HTML
   )
 
 @client_route.message(F.text == "Инструкция")
