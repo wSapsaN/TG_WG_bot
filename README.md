@@ -33,8 +33,8 @@ It is also assumed that the bot accepts requests from Reverse Nginx.
 ## How setup WireGuard?
 
 Topic:
-[ruSetup]("https://youtu.be/5Aql0V-ta8A?si=34Wcg4AgwSvE2fFX")
-- [enSetup]("https://youtu.be/bVKNSf1p1d0?si=E6KMjJOb7xEkbKbu")
+- [ruSetup](https://youtu.be/5Aql0V-ta8A?si=34Wcg4AgwSvE2fFX)
+- [enSetup](https://youtu.be/bVKNSf1p1d0?si=E6KMjJOb7xEkbKbu)
 
 # Launch the application
 
