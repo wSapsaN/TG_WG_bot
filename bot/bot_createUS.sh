@@ -17,7 +17,7 @@ DNS = 8.8.8.8
 
 [Peer]
 PublicKey = /JjRTRuWZvKn5KIOKuIYeuL0LvEz1N/dm6RHD5If3Gk=
-Endpoint = 193.124.92.75:51820 
+Endpoint = 127.0.0.1:51820 
 AllowedIPs = 0.0.0.0/0 
 PersistentKeepalive = 20
 EOF
