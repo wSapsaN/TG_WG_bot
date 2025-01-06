@@ -90,3 +90,8 @@ Run:
 ```bash
 python3 bot/app.py
 ```
+
+And another very important point.
+In the file bot/create_accsess.py on line 8 there is a variable that specifies the path to the file server/wireguard_setup/server_addUS.sh.
+
+If necessary, edit this to suit your needs.
