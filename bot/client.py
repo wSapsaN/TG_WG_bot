@@ -17,11 +17,18 @@ async def cmd_st(message: types.Message):
 
 @client_route.message(F.text == 'VPN')
 async def vpn(message: types.Message, bot: Bot, session: AsyncSession):
-  await add_client(
-    session=session, 
-    id_telegram=message.from_user.id, 
-    nik_name=message.from_user.username,
-  )
+  if message.from_user.username:
+    await add_client(
+      session=session, 
+      id_telegram=message.from_user.id, 
+      nik_name=message.from_user.username,
+    )
+  else:
+    await add_client(
+      session=session, 
+      id_telegram=message.from_user.id, 
+      nik_name=message.from_user.id,
+    )
 
   if await status_useVPN(session=session, id_telegram=message.from_user.id):
     await message.answer("Вы уже отправили запрос или используете VPN.")
@@ -33,7 +40,7 @@ async def vpn(message: types.Message, bot: Bot, session: AsyncSession):
   await message.answer("Запрос на получение VPN отправлен. Ожидайте ответа")
   await bot.send_message(
     bot.admin_list[0],
-    text=f"Пользователь {message.from_user.full_name} @{message.from_user.username} {message.from_user.id} запрашивает доступ для VPN",
+    text=f"Пользователь {message.from_user.id} @{message.from_user.username} {message.from_user.full_name} запрашивает доступ для VPN",
     reply_markup=await req_vpn(), parse_mode=ParseMode.HTML
   )
 

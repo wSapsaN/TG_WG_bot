@@ -30,13 +30,12 @@ async def test_msg(message: types.Message, session: AsyncSession):
 async def result(callback: types.CallbackQuery, session: AsyncSession):
   await callback.answer("Доступ разрешён")
 
-  user_id = int(callback.message.text.split()[3])
+  user_id = int(callback.message.text.split()[1])
   last_ip = await get_lastIPClinet(session=session, id_telegram=user_id)
   name_client = await get_nameClinet(session=session, id_telegram=user_id)
 
   if last_ip <= 250:
     ip_clinet = f"10.10.10.{last_ip+1}"
-    # file_name = await create_config(ip=ip_clinet, user_name=name_client)
     file_name = create_accsess(name_us=name_client, ip_addr=ip_clinet)
 
     file = types.FSInputFile(file_name)

@@ -13,12 +13,12 @@ from admin import admin_route
 from client import client_route
 from middleware import DataBaseMD
 
-from config import TOKEN, WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV
+from config import TOKEN, WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV, ADMIN_LIST
 
 from database.engine import create_db, drop_db, session_maker
 
 bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
-bot.admin_list = []
+bot.admin_list = [ADMIN_LIST]
 
 WEB_SERVER_HOST='127.0.0.1'
 WEB_SERVER_PORT=5000
