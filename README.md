@@ -65,8 +65,8 @@ Check your bash script settings in advance:
 
 Compile and launch our server:
 ```bash
-gcc server/server.c -o server
-./server./server
+gcc server/server.c -o ./server/server
+sudo ./server/server
 ```
 
 We check that it works on the port specified in config.py.
