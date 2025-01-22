@@ -16,18 +16,25 @@ async def get_nameClinet(session: AsyncSession, id_telegram: int)-> str:
     return str(res.scalar())
 
 async def get_lastIPClinet(session: AsyncSession, id_telegram: int)-> int:
-    last_id = await get_userIDinDB__(session=session, id_telegram=id_telegram)
-
-    response = select(User.ip_client).where(User.id == last_id)
-    res = await session.execute(response)
+    last_ip = "0"
     
-    last_ip = res.scalar()
-    if last_ip: return int(last_ip.split('.')[-1])
+    count = 1
+    while last_ip == "0":
+        last_id = await get_userIDinDB__(session=session, id_telegram=id_telegram, travl=count)
+        print(str(last_id) + f"\n\n{id_telegram}\n\n")
+        
+        response = select(User.ip_client).where(User.id == last_id)
+        res = await session.execute(response)
+        
+        last_ip = res.scalar()
 
-    return 1
+        count += 1
+        if count > 15: return 1
 
-async def get_userIDinDB__(session: AsyncSession, id_telegram: int)-> int:
+    return int(last_ip.split('.')[-1])
+        
+async def get_userIDinDB__(session: AsyncSession, id_telegram: int, travl: int)-> int:
     response = select(User.id).where(User.id_telegram == id_telegram)
     res = await session.execute(response)
 
-    return int(res.scalar())-1
+    return int(res.scalar())-travl
