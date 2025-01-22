@@ -4,6 +4,8 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 #define PORT 8580
 
@@ -127,6 +129,15 @@ void server_up()
 
 int main(void)
 {
+  int uid = getuid();
+
+  if (uid != 0)
+  {
+    printf("Run the server at root\n");
+    return -1;
+  }
+  
+
   server_up();
 
   return 0;
